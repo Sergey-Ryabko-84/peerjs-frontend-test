@@ -26,7 +26,7 @@ const Room = () => {
   const [copied, setCopied] = useState(false);
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText("http://localhost:5173/room/" + roomID);
+    navigator.clipboard.writeText("https://main--dreamy-horse-77f21d.netlify.app/room/" + roomID);
     setCopied(true);
     setTimeout(() => {
       setCopied(false);
@@ -37,7 +37,7 @@ const Room = () => {
     if (!user) {
       window.location.href = "/";
     }
-    socket.current = io("https://study-hive-backend-100.onrender.com");
+    socket.current = io("https://peerjs-test.onrender.com");
     socketFunctions.newMessage(socket, setMsgs, user);
 
     peer.on("open", (userID) => {
@@ -56,13 +56,7 @@ const Room = () => {
           const peerID = call.peer;
           socket.current.emit("find-user", { roomID, peerID });
           call.answer(stream);
-          socketFunctions.connectToNewUser(
-            socket,
-            peerID,
-            addedPeers,
-            call,
-            setPeers
-          );
+          socketFunctions.connectToNewUser(socket, peerID, addedPeers, call, setPeers);
         });
 
         socketFunctions.getAllUsers(socket, addedPeers, stream, peer, setPeers);
@@ -81,11 +75,7 @@ const Room = () => {
             <HomeIcon sx={{ fontSize: 35 }} />
           </IconButton>
           <IconButton onClick={copyToClipboard}>
-            {copied ? (
-              <DoneIcon sx={{ fontSize: 30 }} />
-            ) : (
-              <ShareIcon sx={{ fontSize: 30 }} />
-            )}
+            {copied ? <DoneIcon sx={{ fontSize: 30 }} /> : <ShareIcon sx={{ fontSize: 30 }} />}
           </IconButton>
           <Button
             size="small"
@@ -96,18 +86,13 @@ const Room = () => {
               mt: 2,
               fontColor: "grey",
             }}
-            startIcon={<PersonIcon sx={{ fontSize: 30, color: "grey" }} />}
-          >
+            startIcon={<PersonIcon sx={{ fontSize: 30, color: "grey" }} />}>
             {peers.length + 1}
           </Button>
         </div>
       </div>
       <div className="meet">
-        <MeetGrid
-          peers={peers}
-          localVideo={localVideo}
-          localStream={localStream}
-        />
+        <MeetGrid peers={peers} localVideo={localVideo} localStream={localStream} />
       </div>
       <div className="chat">
         <h2>Chat</h2>
